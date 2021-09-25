@@ -6,10 +6,13 @@ The files in this repository were used to configure the network depicted below.
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the playbook file may be used to install only certain pieces of it, such as Filebeat.
 
-  - _TODO: Enter the playbook file._
+  Filebeat: https://github.com/before8now24/UCI-Projects/blob/master/Ansible/filebeat-playbook.yaml
+  Metricbeat: https://github.com/before8now24/UCI-Projects/blob/master/Ansible/metricbeat-playbook.yaml
+  Installing Elk: https://github.com/before8now24/UCI-Projects/blob/master/Ansible/install-elk.yaml
+  Setting up Webservers: https://github.com/before8now24/UCI-Projects/blob/master/Ansible/webservers-playbook.yaml
 
 This document contains the following details:
-- Description of the Topologu
+- Description of the Topology
 - Access Policies
 - ELK Configuration
   - Beats in Use
@@ -22,7 +25,7 @@ The main purpose of this network is to expose a load-balanced and monitored inst
 
 Load balancing ensures that the application will be highly responsive, in addition to restricting access to the network.
 
-- Load Balancers are crucial, as they protect against denial of service attacks (DDoS) by analyzing the traffic coming in and then determining what server to send the traffic to. Traffic is distributed evenly among the servers that are connected to it, preventing a singluar server from getting overloaded. It's also verycommon for load balancers to have a health probe that periodically checks a machine is working properly before sending traffic. If a server isn't working properly, the load balancer will divert traffic from the malfunctioning server until the issue is resolved. A jump box limits the access that the public has to your virtual network because in order to access the other virtual machines, an individual needs the private IPs of the machines. A jumpbox allows greater control over access to a virtual network and its contents.
+- Load Balancers are crucial, as they protect against denial of service attacks (DDoS) by analyzing the traffic coming in and then determining what server to send the traffic to. Traffic is distributed evenly among the servers that are connected to it, preventing a singluar server from getting overloaded. It's also verycommon for load balancers to have a health probe that periodically checks a machine is working properly before sending traffic. If a server isn't working properly, the load balancer will divert traffic from the malfunctioning server until the issue is resolved. A jump box limits the access that the public has to your virtual network because in order to access the Jump-Box you must have the private IP of the VW, as well as having access to the "key.pem" used to create the instance. A jumpbox allows greater control over access to a virtual network and its contents.
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the logs and system traffic
 
@@ -46,7 +49,7 @@ The machines on the internal network are not exposed to the public Internet.
 Only the Jump-Box machine can accept connections from the Internet via port 22. Access to this machine is only allowed from the following IP addresses:
 68.4.189.35/32 (my IP) although you must have the key.pem used when creating this instance.
 
-Machines within the network can only be accessed from the Jump-Box.
+Webservers within the network can only be accessed from the Jump-Box.
 172.31.42.218 (Jump-Box IP)
 
 A summary of the access policies in place can be found in the table below.
@@ -71,7 +74,7 @@ The playbook implements the following tasks:
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-![TODO: Update the path with the name of your screenshot of docker ps output](Images/docker_ps_output.png)
+![image](https://drive.google.com/uc?export=view&id=1yDlVzG1VBOqg41i4Jz0w1dBhuy1Fozb6)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
