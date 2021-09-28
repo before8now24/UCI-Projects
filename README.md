@@ -115,9 +115,9 @@ View a list of containers that have ran on the instance and find the container n
 
 Copy the key into the container: sudo docker cp "yourkey.pem" <container name>:/etc/ansible
 
-Start the container: sudo docker start <container name>
+Start the container: sudo docker start "<container name>"
   
-Connect the bash shell of the container: sudo docker attach <container name>
+Connect the bash shell of the container: sudo docker attach "<container name>"
 
 Before running the playbook, edit the config file host (located at /etc/ansible/hosts) and add the corresponding IPs for the webservers and/or Elk so it runs, move to the ansible folder:   cd /etc/ansible
 
