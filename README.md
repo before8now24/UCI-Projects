@@ -32,9 +32,9 @@ Load balancing ensures that the application will be highly responsive, in additi
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the logs and system traffic
 
-- What does Filebeat watch for? Filebeat generates and monitors log files on the webservers, looking for changes and being capable of specifying when it occured. These log events are then forwarded to either Elasticsearch or Logstash for indexing.
+- Filebeat generates and monitors log files on the webservers, looking for changes and being capable of specifying when it occured. These log events are then forwarded to either Elasticsearch or Logstash for indexing.
 
-- What does Metricbeat record? Metricbeat records metrics from the operating system and services running on the server. By using Elasticsearch or Logstash, you can visualize the metrics and statistics that Metricbeat generates from the OS and running services.
+- Metricbeat records metrics from the operating system and services running on the server. By using Elasticsearch or Logstash, you can visualize the metrics and statistics that Metricbeat generates from the OS and running services.
 
 The configuration details of each machine may be found below.
 
@@ -93,21 +93,46 @@ Filebeat collects log information about the file system and specifies which file
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
 SSH into the control node and follow the steps below:
-- Copy the filebeat-config.yml file to /etc/ansible/filebeat-config.yml 
+- Copy the filebeat-config.yaml file to /etc/ansible/filebeat-config.yml 
 - Update the filebeat-config.yml file to include host "172.31.5.195:9200" with username "elastic" and password "changeme" and setup.Kibana host to "172.31.5.195:5601".
 - Run the playbook, and navigate to Kibana (Elk GUI interface) to check that the installation worked as expected.
+- Run anisble-playbook filebeat-playbook.yaml --key-file "yourpem.key"
 
 
-Which file is the playbook? filebeat-playbook.yaml Where do you copy it? /etc/ansible/filebeat.playbook.yml
+Please make sure to update the filebeat-config.yaml file by adding the Elk IP to the hosts portion of line 1105 & 1805. Also make sure all private IP addresses that need to be accessed need to be added to the hosts file located in /etc/ansible/hosts of the ansible container in order to allow connection. We added 3 IP addresses to this file: 2 were web servers (172.31.41.216 & 172.31.31.183) and an elk server (172.31.5.195). From there, in the playbook file, navigate to "hosts" at the top of the file to specify whether you want the playbook installed on Elk or the Web servers. In addition to this, we also have to specify the host to the ELK server for Filebeat so IP "172.31.5.195" is added to the config file to specify the location for installation.
 
-Which file do you update to make Ansible run the playbook on a specific machine? filebeat-config.yaml How do I specify which machine to install the ELK server on versus which to install Filebeat on? All private IP addresses that need to be accessed need to be added to the hosts file in order to allow connection. We added 3 IP addresses to this file: 2 were web servers (172.31.41.216 & 172.31.31.183) and an elk server (172.31.5.195). From there, in the playbook file, navigate to "hosts" at the top of the file to specify whether you want the playbook installed on Elk or the Web servers. In addition to this, we also have to specify the host to the ELK server for Filebeat so IP "172.31.5.195" is added to the config file to specify the location for installation.
-
-Which URL do you navigate to in order to check that the ELK server is running? http://http://52.88.116.246:5601/app/kibana
+The following URL was used to check that filebeat and metricbeat are running: http://http://52.88.116.246:5601/app/kibana
 
 As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc.
 
-Create/update a playbook: Nano playbookname.yaml
+Download ansible docker image: sudo docker pull cyberxsecurity/ansible
 
-Before running the playbook, edit the config file host and add the corresponding IPs for the webservers and/or Elk so it runs, you can do this by using nano to edit the file. 
+Start the ansible docker container with bash prompt: sudo docker run -ti cyberxsecurity/ansible bash
 
-To run your playbook: ansible-playbook playbookname.yml --key-file "yourkey.pem"
+Run "ansible" to verify ansible is installed
+
+View a list of containers that have ran on the instance and find the container name: docker container list -a
+
+Copy the key into the container: sudo docker cp "yourkey.pem" <container name>:/etc/ansible
+
+Start the container: sudo docker start <container name>
+  
+Connect the bash shell of the container: sudo docker attach <container name>
+
+Before running the playbook, edit the config file host (located at /etc/ansible/hosts) and add the corresponding IPs for the webservers and/or Elk so it runs, move to the ansible folder:   cd /etc/ansible
+
+Edit the hosts file and add the IP address of the second instance to the file after uncomenting "[webservers]"
+nano /etc/hosts
+[webservers]
+172.31.24.41
+
+Once this is done locate the anisble.cfg file then nano the file: cd etc/ansible/ansible.cfg | nano ansible.cfg
+
+Edit the ansible.cfg file and add the user of the remote machine like the following
+remote_user = ec2-user
+  
+Ping the second instance using the command: ansible -m ping all --key-file "youkey.pem"
+
+Create a playbook file and call it apache-playbook.yaml
+ 
+To run your playbook: ansible-playbook apache-playbook.yaml.yml --key-file "yourkey.pem"
