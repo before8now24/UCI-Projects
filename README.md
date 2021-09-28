@@ -103,7 +103,7 @@ Please make sure to update the filebeat-config.yaml file by adding the Elk IP to
 
 The following URL was used to check that filebeat and metricbeat are running: http://http://52.88.116.246:5601/app/kibana
 
-As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc.
+Useful commands to setup docker
 
 Download ansible docker image: sudo docker pull cyberxsecurity/ansible
 
